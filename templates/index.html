@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ дизайна сайта</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1300px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 8px; }
+        .survey-wrapper { display: flex; gap: 25px; flex-wrap: wrap; }
+        .screenshot-box {
+            flex: 1; min-width: 300px; background: white; border-radius: 28px;
+            padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .screenshot-box img {
+            width: 100%; border-radius: 20px; border: 2px solid #e2e8f0;
+            min-height: 200px; object-fit: contain; background: #f8fafc;
+        }
+        .random-btn {
+            margin-top: 18px; width: 100%; padding: 14px; background: #3b82f6;
+            color: white; border: none; border-radius: 40px; cursor: pointer;
+            font-weight: bold; font-size: 16px;
+        }
+        .form-box {
+            flex: 1.5; min-width: 380px; background: white; border-radius: 28px;
+            padding: 25px; max-height: 85vh; overflow-y: auto;
+        }
+        .question-block { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0; }
+        .question-title { font-weight: 700; margin-bottom: 12px; color: #0f172a; }
+        .options-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+        .option-item { display: flex; align-items: center; gap: 8px; }
+        input[type="radio"], input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #3b82f6; }
+        label { cursor: pointer; font-size: 14px; }
+        .check-group { display: flex; flex-wrap: wrap; gap: 12px; }
+        .number-input { width: 80px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 12px; }
+        .scale-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+        .free-text { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 16px; }
+        .submit-btn {
+            width: 100%; padding: 16px; background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white; border: none; border-radius: 40px; font-size: 18px;
+            font-weight: bold; cursor: pointer; margin-top: 16px;
+        }
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #10b981; color: white; padding: 12px 24px; border-radius: 40px;
+            font-weight: bold; z-index: 1000;
+        }
+        @media (max-width: 800px) { .form-box { max-height: none; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header"><h1>🎨 Анализ дизайна сайта</h1><p>Оцени дизайн — помоги сделать лучше</p></div>
+    <div class="survey-wrapper">
+        <div class="screenshot-box">
+            <img id="screenImg" src="" alt="Скриншот">
+            <button class="random-btn" onclick="randomScreen()">🎲 Случайный скриншот</button>
+            <input type="hidden" id="currentScreenUrl" value="">
+        </div>
+        <div class="form-box">
+            <form id="surveyForm">
+                <div class="question-block"><div class="question-title">1. Общее впечатление:</div>
+                    <div class="options-grid"><label class="option-item"><input type="radio" name="impression" value="Чисто и понятно"> Чисто и понятно</label>
+                    <label><input type="radio" name="impression" value="Нормально, но что-то не так"> Нормально, но что-то не так</label>
+                    <label><input type="radio" name="impression" value="Хаос, ничего не понятно"> Хаос, ничего не понятно</label></div>
+                </div>
+                <div class="question-block"><div class="question-title">2. Что бросается в глаза? (можно несколько)</div>
+                    <div class="check-group"><label><input type="checkbox" name="prob_much_text"> Очень много текста</label>
+                    <label><input type="checkbox" name="prob_many_buttons"> Слишком много кнопок/ссылок</label>
+                    <label><input type="checkbox" name="prob_many_fonts"> Разные шрифты (4+ видов)</label>
+                    <label><input type="checkbox" name="prob_bright_colors"> Слишком яркие цвета</label>
+                    <label><input type="checkbox" name="prob_gray"> Всё серое, ничего не выделено</label>
+                    <label><input type="checkbox" name="prob_many_images"> Много картинок, мешают</label>
+                    <label><input type="checkbox" name="prob_empty"> Пустые области</label></div>
+                </div>
+                <div class="question-block"><div class="question-title">3. Пунктов меню (сколько насчитали?)</div>
+                    <input type="number" name="menu_count" class="number-input" min="0" max="30">
+                </div>
+                <div class="question-block"><div class="question-title">4. Визуальный шум (1-5)</div>
+                    <div class="scale-row"><label>1 <input type="radio" name="noise_level" value="1"></label>
+                    <label>2 <input type="radio" name="noise_level" value="2"></label>
+                    <label>3 <input type="radio" name="noise_level" value="3"></label>
+                    <label>4 <input type="radio" name="noise_level" value="4"></label>
+                    <label>5 <input type="radio" name="noise_level" value="5"></label></div>
+                </div>
+                <div class="question-block"><div class="question-title">5. Как шрифты?</div>
+                    <div class="options-grid"><label><input type="radio" name="fonts" value="Легко читать"> Легко читать</label>
+                    <label><input type="radio" name="fonts" value="Местами мелко/размыто"> Местами мелко/размыто</label>
+                    <label><input type="radio" name="fonts" value="Тяжело читать"> Тяжело читать</label></div>
+                </div>
+                <div class="question-block"><div class="question-title">6. Цвета помогают или мешают?</div>
+                    <div class="options-grid"><label><input type="radio" name="colors_help" value="Помогают"> Помогают</label>
+                    <label><input type="radio" name="colors_help" value="Нейтрально"> Нейтрально</label>
+                    <label><input type="radio" name="colors_help" value="Мешают"> Мешают</label></div>
+                </div>
+                <div class="question-block"><div class="question-title">7. Понятно ли куда нажимать?</div>
+                    <div class="options-grid"><label><input type="radio" name="cta_found" value="Да, видно сразу"> Да, видно сразу</label>
+                    <label><input type="radio" name="cta_found" value="Не очень, надо искать"> Не очень, надо искать</label>
+                    <label><input type="radio" name="cta_found" value="Вообще непонятно"> Вообще непонятно</label></div>
+                </div>
+                <div class="question-block"><div class="question-title">8. Акцентных цветов (сколько кроме белого/черного)</div>
+                    <input type="number" name="accent_colors" class="number-input" min="0" max="10">
+                </div>
+                <div class="question-block"><div class="question-title">9. Выглядит устаревшим?</div>
+                    <div class="options-grid"><label><input type="radio" name="looks_old" value="Нет, современный"> Нет, современный</label>
+                    <label><input type="radio" name="looks_old" value="Средний"> Средний</label>
+                    <label><input type="radio" name="looks_old" value="Да, выглядит старым"> Да, выглядит старым</label></div>
+                </div>
+                <div class="question-block"><div class="question-title">10. Что здесь главное?</div>
+                    <div class="options-grid"><label><input type="radio" name="main_focus" value="Товары/услуги"> Товары/услуги</label>
+                    <label><input type="radio" name="main_focus" value="Контент/текст"> Контент/текст</label>
+                    <label><input type="radio" name="main_focus" value="Красивые картинки"> Красивые картинки</label>
+                    <label><input type="radio" name="main_focus" value="Кнопка купить/записаться"> Кнопка купить/записаться</label>
+                    <label><input type="radio" name="main_focus" value="Ничего не понятно"> Ничего не понятно</label></div>
+                </div>
+                <div class="question-block"><div class="question-title">11. Что не так? (одно-два слова)</div>
+                    <input type="text" name="free_text" class="free-text" placeholder="например: всё кричит, не найти меню">
+                </div>
+                <input type="hidden" name="screenshot_url" id="screenshotUrlField">
+                <button type="submit" class="submit-btn">📤 Отправить оценку</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // screenshots прилетает из Flask как JSON-массив
+    const screenshots = {{ screenshots | tojson | safe }};
+    let currentUrl = "";
+    
+    function randomScreen() {
+        if (!screenshots || screenshots.length === 0) {
+            console.error("Нет скриншотов");
+            return;
+        }
+        const random = screenshots[Math.floor(Math.random() * screenshots.length)];
+        const img = document.getElementById("screenImg");
+        const urlField = document.getElementById("currentScreenUrl");
+        const formField = document.getElementById("screenshotUrlField");
+        
+        if (img) img.src = random;
+        if (urlField) urlField.value = random;
+        if (formField) formField.value = random;
+        currentUrl = random;
+    }
+    
+    // Ждем загрузки страницы
+    document.addEventListener("DOMContentLoaded", function() {
+        randomScreen();
+    });
+    
+    document.getElementById("surveyForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentUrl) {
+            alert("Сначала выбери скриншот");
+            return;
+        }
+        const formData = new FormData(e.target);
+        try {
+            const response = await fetch("/submit", { method: "POST", body: formData });
+            const result = await response.json();
+            showToast(result.status === "ok" ? "✅ Спасибо, ответ отправлен!" : "❌ Ошибка, попробуй еще");
+            if (result.status === "ok") {
+                e.target.reset();
+                randomScreen();
+            }
+        } catch (err) {
+            showToast("❌ Ошибка соединения");
+        }
+    });
+    
+    function showToast(msg) {
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.innerText = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+</script>
+</body>
+</html>
