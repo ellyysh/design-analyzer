@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Все ответы</title>
+<style>
+    body { font-family: system-ui; background: #f1f5f9; padding: 20px; }
+    table { width: 100%; background: white; border-radius: 20px; border-collapse: collapse; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: #f8fafc; }
+</style>
+</head>
+<body>
+<h1>Все ответы ({{ responses|length }})</h1>
+<p><a href="/admin/dashboard">← Назад</a></p>
+<table>
+    <thead><th>Время</th><th>Скриншот</th><th>Впечатление</th><th>Шум</th><th>Меню</th><th>Свободный текст</th></thead>
+    <tbody>
+    {% for resp in responses %}
+    <tr>
+        <td>{{ resp.submitted_at[:19] }}</td>
+        <td>{{ resp.screenshot_file[:50] }}</td>
+        <td>{{ resp.impression[:30] }}</td>
+        <td>{{ resp.noise_level }}</td>
+        <td>{{ resp.menu_count }}</td>
+        <td>{{ resp.free_text[:50] if resp.free_text else '—' }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

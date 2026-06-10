@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Админ-панель</title>
+<style>
+    body { font-family: system-ui; background: #f1f5f9; margin: 0; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .stats { display: flex; gap: 20px; margin-bottom: 30px; }
+    .stat-card { background: white; padding: 20px; border-radius: 20px; flex: 1; text-align: center; }
+    .stat-number { font-size: 36px; font-weight: bold; color: #3b82f6; }
+    table { width: 100%; background: white; border-radius: 20px; overflow: hidden; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th { background: #f8fafc; }
+    .btn { display: inline-block; padding: 8px 16px; background: #3b82f6; color: white; text-decoration: none; border-radius: 20px; margin-right: 10px; }
+    .btn-danger { background: #ef4444; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>📊 Админ-панель</h1>
+    <p><a href="/admin/logout" class="btn btn-danger">Выйти</a></p>
+    
+    <div class="stats">
+        <div class="stat-card"><div class="stat-number">{{ stats.total_responses }}</div><div>всего ответов</div></div>
+        <div class="stat-card"><div class="stat-number">{{ stats.total_screenshots }}</div><div>скриншотов</div></div>
+        <div class="stat-card"><div class="stat-number">{{ stats.avg_responses_per_screenshot }}</div><div>ответов на скриншот (среднее)</div></div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <a href="/admin/responses" class="btn">📋 Все ответы</a>
+        <a href="#" onclick="exportData()" class="btn">📤 Экспорт JSONL (для DeepSeek)</a>
+        <a href="#" onclick="exportAggregated()" class="btn">📊 Агрегировать по скриншотам</a>
+    </div>
+
+    <h2>Последние 10 ответов</h2>
+    <table>
+        <thead><th>Время</th><th>Скриншот</th><th>Шум</th><th>Меню</th></thead>
+        <tbody>
+        {% for resp in responses[:10] %}
+        <tr>
+            <td>{{ resp.submitted_at[:19] }}</td>
+            <td>{{ resp.screenshot_file[:40] }}</td>
+            <td>{{ resp.noise_level }}</td>
+            <td>{{ resp.menu_count }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+function exportData() {
+    fetch('/admin/export')
+        .then(r => r.json())
+        .then(data => alert('Экспортировано ' + data.count + ' ответов в ' + data.file));
+}
+function exportAggregated() {
+    fetch('/admin/export_aggregated')
+        .then(r => r.json())
+        .then(data => alert('Агрегировано ' + data.screenshots_analyzed + ' скриншотов в ' + data.file));
+}
+</script>
+</body>
+</html>
